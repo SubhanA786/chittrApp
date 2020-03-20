@@ -40,7 +40,7 @@ const loggedIn = createStackNavigator({
         headerMode: "none",
         initialRouteName: "Dashboard"
     });
-
+//
 const AppStackNav = createStackNavigator({
         Auth: login,
         App: loggedIn,
