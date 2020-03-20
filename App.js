@@ -3,6 +3,8 @@ import { createStackNavigator } from 'react-navigation-stack';
 import HomeScreen from './screens/Homepage';
 import SignUp from './screens/Register';
 import LoginScreen from './screens/LoginScreen';
+import addTweet from './screens/addTweet';
+import Tweet from './screens/Tweet';
 
 
 
@@ -26,6 +28,12 @@ const login = createStackNavigator({
 const loggedIn = createStackNavigator({
         Dashboard: {
             screen: Dashboard
+        },
+         Tweet: {
+            screen: Tweet
+        },
+        addTweet:{
+                screen: addTweet
         }
     },
     {
