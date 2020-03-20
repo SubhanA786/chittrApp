@@ -1,1 +1,156 @@
-//
+import React, {Component} from 'react';
+import {AsyncStorage, FlatList, StyleSheet, Text, TextInput, TouchableOpacity, View} from 'react-native';
+import { Avatar, Button, Card, Title, Paragraph } from 'react-native-paper';
+import Moment from 'moment';
+import * as Animatable from 'react-native-animatable';
+export default class HomeScreen extends Component{
+
+    constructor() {
+        super();
+        this.state = {
+            dataSource: [],
+            myId: 0,
+        }
+    }
+
+
+    render(){
+        return(
+
+            <View style={Styles.container}>
+                <FlatList style={Styles.flatList} data={this.state.dataSource} renderItem={this.renderItem} extraData={this.state.dataSource}>
+            </FlatList>
+                <View style={Styles.buttonsContainer}>
+                    <TouchableOpacity onPress={() => this.props.navigation.navigate('MainScreen')}>
+                        <View style={Styles.tweetButton}>
+                            <Text style = {{color: 'black'}}>Logout</Text>
+                        </View>
+                    </TouchableOpacity>
+                    <TouchableOpacity onPress={() => this.props.navigation.navigate('addTweet')}>
+                        <View style={Styles.tweetButton}>
+                            <Text style = {{color: 'black'}}>Tweet?</Text>
+                        </View>
+                    </TouchableOpacity>
+                    <TouchableOpacity onPress={() => this.props.navigation.navigate('SearchUsers')}>
+                        <View style={Styles.tweetButton}>
+                            <Text style = {{color: 'black'}}>Search</Text>
+                        </View>
+                    </TouchableOpacity>
+                    <TouchableOpacity onPress={() => this.props.navigation.navigate('MyProfile')}>
+                        <View style={Styles.tweetButton}>
+                            <Text style = {{color: 'black'}}>My Profile</Text>
+                        </View>
+                    </TouchableOpacity>
+                </View>
+
+            </View>
+        )
+    }
+
+    renderItem = ({item}) => {
+        Moment.locale('en')
+        var ts = item.timestamp;
+        return(
+            <View style={Styles.chits}>
+                {/*<Text>{Moment(dt).format('d MMM, YYYY')} </Text>*/}
+                <Card Style={Styles.mainCard}>
+                    <View style={Styles.chitInfo}>
+                        <Card.Title title={item.user.given_name + ' ' + item.user.family_name + 'My ID: ' + this.state.myId + 'User ID: ' + item.user.user_id} subtitle={'Posted on: '+Moment(ts).format('d MMM, YYYY H:mma')} />
+                    </View>
+                    <Card.Content>
+                        <Title style={Styles.chit_content}>{item.chit_content}</Title>
+                        <Title style={Styles.chit_content}>{ (this.state.myId !=  item.user.user_id) ? 'Ids do not match' : 'Ids match'}</Title>
+                        {/*<Paragraph>{item.chit_content}</Paragraph>*/}
+                    </Card.Content>
+                    <Card.Cover source={{ uri: 'https://picsum.photos/700' }} />
+                    {/*<Card.Actions>*/}
+                    {/*    <Button>Cancel</Button>*/}
+                    {/*    <Button>Ok</Button>*/}
+                    {/*</Card.Actions>*/}
+                </Card>
+               {/*<View>*/}
+               {/*    <Text>{ (this.state.myId !==  item.user.user_id) ? 'Yes' : 'No'}</Text> logged in.*/}
+               {/*</View>*/}
+
+            </View>
+
+        )
+    };
+
+    async componentDidMount() {
+        let id = await AsyncStorage.getItem('id');
+        console.disableYellowBox = true;
+        fetch('http://10.0.2.2:3333/api/v0.0.5/chits', {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        })
+            .then((response) =>
+                response.json()
+            )
+            .then((responseJson) => {
+                this.setState({dataSource: responseJson});
+                this.setState({myId: id});
+                console.log("I am datasource" + this.state.dataSource);
+            })
+            .catch((error) => {
+                console.error(error);
+            });
+    }
+
+
+}
+
+const Styles = StyleSheet.create({
+
+    container: {
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center'
+    },
+
+    mainCard: {
+        width: '95%'
+    },
+
+    flatList: {
+        flex: 1,
+        width: '100%',
+        backgroundColor: '#E8E8E8'
+    },
+
+    chits: {
+        padding: 5
+    },
+
+    chitInfo: {
+        borderColor: '#E8E8E8',
+        borderWidth: 1,
+    },
+
+    chit_content: {
+        backgroundColor: 'white',
+        borderRadius: 4
+    },
+
+    tweetButton: {
+        backgroundColor: '#33CCFF',
+        alignItems: 'center',
+        borderRadius: 7,
+        padding: 15,
+        width: '100%',
+        paddingHorizontal: 20,
+        borderColor: 'white',
+        borderWidth: 4,
+    },
+
+    buttonsContainer: {
+        height: 70, paddingHorizontal: 5, alignItems: 'center',
+        width: '100%',
+        justifyContent: 'center',
+        backgroundColor: 'white',
+        flexDirection: 'row',
+    }
+
+});
