@@ -183,7 +183,7 @@
 //         color: "#333"
 //     },
 //     deleteButton: {
-//         backgroundColor: "red",
+//         backgroundColor: "red",//
 //         paddingVertical: 10,
 //         width: "95%",
 //         alignSelf: "center"
