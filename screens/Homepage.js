@@ -17,7 +17,7 @@ class Homepage extends Component{
         {/*        onPress={() => alert('Login with Facebook')}>*/}
         {/*        Login with Facebook*/}
         {/*    </Icon.Button>*/}
-        {/*</View>*/}
+        
         <Image source={require('../images/chittr1.png')} />
         <View style={styles.mainContainer}>
             <Icon name="heart" color="#0072ff" size={30} />
